@@ -18,13 +18,23 @@ Algoritmo DFS-v1:
         e per cui 'delta(v) <= t'.
 
         Se E(u, v) non é vuoto:
+            Attraverso l'arco 'e = (u, v, t)' dove 't = min{t : (u, v, t) appartiene ad E(u,v)}'
+            (attraverso l'arco con tempo minore)
+            (in questo caso andiamo al passo b)
 
 
         Se E(u, v) é vuoto:
+            Se 'u' é il source vertex terminiamo la DFS,
+            altrimenti, consideriamo l'arco (up, u, t) che ci ha permesso di visitare 'u' e
+                        effettuiamo il backtrack visitando il predecessore 'up' di 'u'
+                        (in questo caso andiamo al passo a)
+            (torno al vertice precedente)
 
+    b) Dopo la visita di ogni arco (u, v, t):
+        Se 'delta(v) > t' impostiamo 'delta(v) = t' e visitiamo 'v'
+        altrimenti nulla
+        (in entrambi i casi al passo a)
 
-
-    b) Dopo la visita di ogni arco
-
+        (Il controllo 'delta(v) > t' é necessario per visitare solo nodi 'v' che hanno delta(v) = inf)
 
 '''
