@@ -4,6 +4,7 @@ DFS on temporal graphs
 
 
 Grafo temporale:                G(V,E)
+Source vertex:                  s
 Tempo di inizio:                Ts
 Vettore dei tempi di visita:    delta
 
