@@ -1,6 +1,7 @@
 from graphviz import Digraph
 
 g = Digraph()
+
 nodes = ["a", "b", "c", "f", "g", "h"]
 edges = [["a", "b", "1"],
          ["a", "b", "6"],
@@ -22,6 +23,6 @@ for edge in edges:
     start_node = edge[0]
     end_node = edge[1]
     label = edge[2]
-    g.edge(start_node, end_node, label)
+    g.edge(start_node, end_node, label, minlen='2', dir="forward")
 
 g.view()

@@ -20,6 +20,7 @@ if __name__ == "__main__":
         graph.add_edge(e[0], e[1], e[2])
 
     graph.print_graph()
+
 '''
     graph = Graph()
 
