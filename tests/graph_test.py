@@ -1,7 +1,7 @@
-from graph import Graph
+from temporal_graph import TemporalGraph
 
 if __name__ == "__main__":
-    graph = Graph()
+    graph = TemporalGraph()
 
     edges = [["a", "b", "1"],
              ["a", "b", "6"],
@@ -20,6 +20,10 @@ if __name__ == "__main__":
         graph.add_edge(e[0], e[1], e[2])
 
     graph.print_graph()
+
+    print(graph.get_neighbors("a"))
+
+    print(graph.get_edge_neighbor("a", "b"))
 
 '''
     graph = Graph()
