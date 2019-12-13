@@ -48,27 +48,27 @@ Algoritmo DFS-v1:
 
 '''
 
-'''Find the next edge to traverse with minimum time'''
 
-
-def edge_min(E):
+def find_edge_with_min_time(E):
     edge_min = E[0]
     for i in range(1, len(E)):
         if E[i].time < edge_min.time:
             edge_min = E[i]
     return edge_min
 
-def DFSv1(current):
-    for v in graph.get_neighbors(current):
-        E = list(filter(lambda x: not x.is_traversed and sigma[current] <= x.time, graph.get_edge_neighbor(current, v)))
-        if len(E) != 0:
-            tmin = edge_min(E)
-            tmin.is_traversed = True
-            if sigma[tmin.destination] >  tmin.time:
-                sigma[tmin.destination] = tmin.time
-            DFSv1(tmin.destination)
 
-#--------------------------------------------------------
+def DFSv1(current_node):
+    for v in graph.get_neighbors(current_node):
+        filter_function = lambda edge: not edge.is_traversed and sigma[current_node] <= edge.time
+        E = list(filter(filter_function, graph.get_edge_neighbor(current_node, v)))
+        if len(E) != 0:
+            edge_min = find_edge_with_min_time(E)
+            edge_min.is_traversed = True
+            if sigma[edge_min.destination] > edge_min.time:
+                sigma[edge_min.destination] = edge_min.time
+            DFSv1(edge_min.destination)
+
+# --------------------------------------------------------
 from temporal_graph import TemporalGraph
 from math import inf
 
@@ -90,7 +90,8 @@ edges = [["a", "b", 1],
 for e in edges:
     graph.add_edge(e[0], e[1], e[2])
 
-# da qui parte la DFSv1
+# V:= insieme di tutti i nodi del grafo
+# sigma:= dizionario { <nome_nodo> : <ultimo istante in cui è stato visitato> }
 starting_time = 2
 V = graph.get_nodes()
 sigma = {key: inf for key in V}

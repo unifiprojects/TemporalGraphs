@@ -1,9 +1,8 @@
 # Node of the adjacency list
-class AdjNode:
+class TemporalEdge:
     def __init__(self, source, destination, time):
         self.source = source
         self.destination = destination
-        # Edge visiting time
         self.time = time
         self.next = None
         self.is_traversed = False
@@ -19,16 +18,16 @@ class TemporalGraph:
         self.graph = {}
 
     def add_edge(self, src, dest, time):
-        # Nodes initialization
+        # Edges initialization
         if self.graph.get(src) is None:
             self.graph[src] = None
         if self.graph.get(dest) is None:
             self.graph[dest] = None
 
         # Node added to the adjacency list
-        node = AdjNode(src, dest, time)
-        node.next = self.graph[src]
-        self.graph.update({src: node})
+        edge = TemporalEdge(src, dest, time)
+        edge.next = self.graph[src]
+        self.graph.update({src: edge})
 
     def print_graph(self):
         for i in self.graph.keys():
