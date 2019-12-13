@@ -1,16 +1,21 @@
 # Node of the adjacency list
 class AdjNode:
-    def __init__(self, vertex, time):
-        self.vertex = vertex
+    def __init__(self, source, destination, time):
+        self.source = source
+        self.destination = destination
         # Edge visiting time
         self.time = time
         self.next = None
+        self.is_traversed = False
+
+    def __str__(self):
+        return "[ " + self.source + ", " + self.destination + ", " + str(self.time) + ", " + str(
+            self.is_traversed) + "]"
 
 
 class TemporalGraph:
 
     def __init__(self):
-        self.V = []
         self.graph = {}
 
     def add_edge(self, src, dest, time):
@@ -21,7 +26,7 @@ class TemporalGraph:
             self.graph[dest] = None
 
         # Node added to the adjacency list
-        node = AdjNode(dest, time)
+        node = AdjNode(src, dest, time)
         node.next = self.graph[src]
         self.graph.update({src: node})
 
@@ -30,13 +35,13 @@ class TemporalGraph:
             print("Adjacency list of vertex {}:\n[".format(i), end="")
             temp = self.graph.get(i)
             while temp:
-                print(" -> (" + temp.vertex + ", " + temp.time + ") ", end="")
+                print(" -> (" + temp.destination + ", " + temp.time + ") ", end="")
                 temp = temp.next
             print("] \n")
 
     # Get the list of all the nodes
     def get_nodes(self):
-        return self.graph.keys()
+        return list(self.graph.keys())
 
     # Get the list of all the edges
     def get_edges(self):
@@ -44,7 +49,7 @@ class TemporalGraph:
         for i in self.graph.keys():
             temp = self.graph.get(i)
             while temp:
-                edges.append([i, temp.vertex, temp.time])
+                edges.append(temp)
                 temp = temp.next
         return edges
 
@@ -53,7 +58,7 @@ class TemporalGraph:
         neighbors = []
         temp = self.graph.get(node)
         while temp:
-            neighbors.append(temp.vertex)
+            neighbors.append(temp.destination)
             temp = temp.next
         # Remove duplications
         neighbors = list(dict.fromkeys(neighbors))
@@ -64,7 +69,7 @@ class TemporalGraph:
         edge_neighbor = []
         temp = self.graph.get(u)
         while temp:
-            if (v is None) or (v is not None and temp.vertex == v):
-                edge_neighbor.append([u, temp.vertex, temp.time])
+            if (v is None) or (v is not None and temp.destination == v):
+                edge_neighbor.append(temp)
             temp = temp.next
         return edge_neighbor
