@@ -65,12 +65,15 @@ def DFSv1(current_node):
             edge_min = find_edge_with_min_time(E)
             edge_min.is_traversed = True
             if sigma[edge_min.destination] > edge_min.time:
+                tree_node_root.add_node(TreeNode(edge_min.destination, edge_min.time))
                 sigma[edge_min.destination] = edge_min.time
             DFSv1(edge_min.destination)
 
 # --------------------------------------------------------
 from temporal_graph import TemporalGraph
 from math import inf
+from TreeNode import TreeNode
+from draw_tree import draw_tree
 
 graph = TemporalGraph()
 
@@ -97,12 +100,14 @@ V = graph.get_nodes()
 sigma = {key: inf for key in V}
 source = V[0]
 sigma[source] = starting_time
+tree_node_root = TreeNode(source, starting_time)
 DFSv1(source)
 
 all_edges = graph.get_edges()
 for e in all_edges:
     print(e)
 
+draw_tree(tree_node_root)
 
 
 
