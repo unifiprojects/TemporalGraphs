@@ -61,6 +61,7 @@ class TemporalGraph:
             temp = temp.next
         # Remove duplications
         neighbors = list(dict.fromkeys(neighbors))
+        neighbors.sort()
         return neighbors
 
     # Get node neighbors, given u and v (v optional)

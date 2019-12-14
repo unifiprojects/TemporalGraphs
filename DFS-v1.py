@@ -58,17 +58,29 @@ def find_edge_with_min_time(E):
 
 
 def DFSv1(current_node):
+    global current_tree_node
     for v in graph.get_neighbors(current_node):
+
+        # il predecessore nella DFS non deve essere considerato come vicino
+        if v is predecessor[current_tree_node.name]:
+            continue
+
+        # filtra gli archi che non sono stati attraversati e che sono ancora attivi
         filter_function = lambda edge: not edge.is_traversed and sigma[current_node] <= edge.time
         E = list(filter(filter_function, graph.get_edge_neighbor(current_node, v)))
         if len(E) != 0:
             edge_min = find_edge_with_min_time(E)
             edge_min.is_traversed = True
             if sigma[edge_min.destination] > edge_min.time:
-                tree_node_root.add_node(TreeNode(edge_min.destination, edge_min.time))
+                # aggiorna albero DFS con un nuovo nodo
+                next_tree_node = TreeNode(edge_min.destination, edge_min.time)
+                predecessor[next_tree_node.name] = current_tree_node
+                # aggiorno il nodo dell'albero a cui aggiungere elementi nella prossima chiamata ricorsiva
+                current_tree_node.add_node(next_tree_node)
+                current_tree_node = next_tree_node
                 sigma[edge_min.destination] = edge_min.time
-            DFSv1(edge_min.destination)
-
+                DFSv1(edge_min.destination)
+    current_tree_node = predecessor[current_tree_node.name]
 # --------------------------------------------------------
 from temporal_graph import TemporalGraph
 from math import inf
@@ -101,11 +113,9 @@ sigma = {key: inf for key in V}
 source = V[0]
 sigma[source] = starting_time
 tree_node_root = TreeNode(source, starting_time)
+predecessor = {node: None for node in V}
+current_tree_node = tree_node_root
 DFSv1(source)
-
-all_edges = graph.get_edges()
-for e in all_edges:
-    print(e)
 
 draw_tree(tree_node_root)
 
