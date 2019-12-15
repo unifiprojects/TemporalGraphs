@@ -1,37 +1,41 @@
 from graphviz import Digraph
+import copy
 
 
-def updateName(node, omonimi):
-    if node.name not in omonimi.keys():
-        omonimi[node.name] = 0
-        return node.name
-    else:
-        omonimi[node.name] += 1
-        return node.name + str(omonimi[node.name])
+def get_new_name(nodes, name):
+    name = name.split('-')[0]
+    for i in range(1, len(nodes)):
+        new_name = name + "-" + str(i)
+        if new_name not in nodes:
+            return new_name
 
 
-def getName(node, omonimi):
-    if omonimi[node.name] == 0:
-        return node.name
-    else:
-        return node.name + str(omonimi[node.name])
-
-
-def draw_tree(tree_node_root):
-    omonimi = {}
-    g = Digraph()
-    g.node(tree_node_root.name)
-    updateName(tree_node_root, omonimi)
-    queue = [tree_node_root]
+def change_duplicate_names(copy_tree_node):
+    nodes = [copy_tree_node.name]
+    queue = [copy_tree_node]
     while queue:
         node = queue.pop(0)
         for child in node.list_of_nodes:
             queue.append(child)
-            g.node(updateName(child, omonimi))
-            g.edge(getName(node, omonimi), getName(child, omonimi), str(child.last_time_of_visit), minlen='2', dir="forward")
+            if child.name not in nodes:
+                nodes.append(child.name)
+            else:
+                child.name = get_new_name(nodes, child.name)
+                nodes.append(child.name)
+
+
+def draw_tree(tree_node_root):
+    copy_tree_node = copy.deepcopy(tree_node_root)
+    change_duplicate_names(copy_tree_node)
+
+    g = Digraph()
+    g.node(copy_tree_node.name)
+    queue = [copy_tree_node]
+    while queue:
+        node = queue.pop(0)
+        for child in node.list_of_nodes:
+            queue.append(child)
+            g.node(child.name)
+            g.edge(node.name, child.name, str(child.last_time_of_visit), minlen='2', dir="forward")
+
     g.view()
-
-
-
-
-

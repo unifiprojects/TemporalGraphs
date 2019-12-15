@@ -57,7 +57,7 @@ def find_edge_with_min_time(E):
     return edge_min
 
 
-def DFSv1(current_node):
+def dfsv1(current_node):
     global current_tree_node
     for v in graph.get_neighbors(current_node):
 
@@ -78,9 +78,12 @@ def DFSv1(current_node):
                 # aggiorno il nodo dell'albero a cui aggiungere elementi nella prossima chiamata ricorsiva
                 current_tree_node.add_node(next_tree_node)
                 current_tree_node = next_tree_node
+
                 sigma[edge_min.destination] = edge_min.time
-                DFSv1(edge_min.destination)
+                dfsv1(edge_min.destination)
     current_tree_node = predecessor[current_tree_node.name]
+
+
 # --------------------------------------------------------
 from temporal_graph import TemporalGraph
 from math import inf
@@ -115,9 +118,7 @@ sigma[source] = starting_time
 tree_node_root = TreeNode(source, starting_time)
 predecessor = {node: None for node in V}
 current_tree_node = tree_node_root
-DFSv1(source)
+
+dfsv1(source)
 
 draw_tree(tree_node_root)
-
-
-
