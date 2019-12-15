@@ -42,9 +42,117 @@ Algoritmo BFS:
 
 '''
 
+# ----------------------- utility functions ---------------------------------
+def isNodePresentIntoQueue(v, queue):
+    for item in queue:
+        if item[0] is v:
+            return  item
+    return None
+
+def find_edge_with_min_time(E):
+    edge_min = E[0]
+    for i in range(1, len(E)):
+        if E[i].time < edge_min.time:
+            edge_min = E[i]
+    return edge_min
+
+def updateNodeIntoQueue(queue, occurrence, time, pred):
+    count = 0
+    for item in queue:
+        if item == occurrence:
+            queue.remove(item)
+            queue.insert(count, (occurrence.name, dist[occurrence.name], time, pred))
+            return
+        count += 1
+
+# ------------------------- IMPORT and GRAPH DEFINITION -------------------------------
+from temporal_graph import TemporalGraph
+from math import inf
+from TreeNode import TreeNode
+from draw_tree import draw_tree
+
+graph = TemporalGraph()
+
+edges = [["a", "b", 2],
+         ["b", "a", 5],
+         ["a", "c", 4],
+         ["a", "f", 7],
+         ["f", "g", 3],
+         ["b", "f", 3],
+         ["c", "f", 5],]
+
+for e in edges:
+    graph.add_edge(e[0], e[1], e[2])
+
+# ------------- starting time, sigma, dist ecc ------------
+starting_time = 0
+V = graph.get_nodes()
+sigma = {key: inf for key in V}
+dist = {key: inf for key in V}
+predecessor = {node: None for node in V}
+# ------------- updating source ------------
+source = V[0]
+sigma[source] = starting_time
+dist[source] = 0
+queue = [(source, 0, starting_time, None)]
+# ------------- setting first tree node ------------
+tree_node_root = TreeNode(source, starting_time)
+current_tree_node = tree_node_root
+tree_nodes = {source: tree_node_root}
+
+while queue:
+    queue_item = queue.pop(0)
+    print("L'elemento estratto è: " + str(queue_item))
+    current_node = queue_item[0]
+    current_tree_node = tree_nodes[current_node]
+    for v in graph.get_neighbors(current_node):
+
+        # il predecessore nella BFS non deve essere considerato come vicino
+        if v is predecessor[current_node]:
+            continue
+
+        # filtra gli archi che non sono stati attraversati e che sono ancora attivi
+        filter_function = lambda edge: not edge.is_traversed and sigma[current_node] <= edge.time
+        E = list(filter(filter_function, graph.get_edge_neighbor(current_node, v)))
+        if len(E) != 0:
+            edge_min = find_edge_with_min_time(E)
+            occurrence = isNodePresentIntoQueue(v, queue)
+            if not occurrence:
+                edge_min.is_traversed = True
+                if sigma[v] > edge_min.time:
+                    dist[v] = dist[current_node] + 1
+                    sigma[v] = edge_min.time
+                    predecessor[v] = current_node
+                    queue.append((v, dist[v], sigma[v], predecessor[v]))
+            else:
+                if occurrence != None and dist[occurrence[0]] == dist[current_node] + 1:
+                    edge_min.is_traversed = True
+                    if sigma[v] > edge_min.time:
+                        sigma[v] = edge_min.time
+                        predecessor[v] = current_node
+                        updateNodeIntoQueue(queue, occurrence, sigma[v], current_node)
+                elif occurrence != None and dist[occurrence[0]] == dist[current_node]:
+                    edge_min.is_traversed = True
+                    if sigma[v] > edge_min.time:
+                        dist[v] = dist[current_node] + 1
+                        sigma[v] = edge_min.time
+                        predecessor[v] = current_node
+                        queue.append((v, dist[v], sigma[v], predecessor[v]))
 
 
+for edge in graph.get_edges():
+    print(edge)
 
+print(tree_node_root)
+print(tree_node_root.list_of_nodes[0])
+print(tree_node_root.list_of_nodes[1])
+print(tree_node_root.list_of_nodes[2])
+#draw_tree(tree_node_root)
+
+
+new_tree_node = TreeNode(v, edge_min.time)
+tree_nodes[v] = new_tree_node
+current_tree_node.add_node(new_tree_node)
 
 
 
