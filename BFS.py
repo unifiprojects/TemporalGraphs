@@ -120,6 +120,9 @@ while queue:
             if not occurrence:
                 edge_min.is_traversed = True
                 if sigma[v] > edge_min.time:
+                    new_tree_node = TreeNode(v, edge_min.time)
+                    tree_nodes[v] = new_tree_node
+                    current_tree_node.add_node(new_tree_node)
                     dist[v] = dist[current_node] + 1
                     sigma[v] = edge_min.time
                     predecessor[v] = current_node
@@ -128,12 +131,18 @@ while queue:
                 if occurrence != None and dist[occurrence[0]] == dist[current_node] + 1:
                     edge_min.is_traversed = True
                     if sigma[v] > edge_min.time:
+                        new_tree_node = TreeNode(v, edge_min.time)
+                        tree_nodes[v] = new_tree_node
+                        current_tree_node.add_node(new_tree_node)
                         sigma[v] = edge_min.time
                         predecessor[v] = current_node
                         updateNodeIntoQueue(queue, occurrence, sigma[v], current_node)
                 elif occurrence != None and dist[occurrence[0]] == dist[current_node]:
                     edge_min.is_traversed = True
                     if sigma[v] > edge_min.time:
+                        new_tree_node = TreeNode(v, edge_min.time)
+                        tree_nodes[v] = new_tree_node
+                        current_tree_node.add_node(new_tree_node)
                         dist[v] = dist[current_node] + 1
                         sigma[v] = edge_min.time
                         predecessor[v] = current_node
