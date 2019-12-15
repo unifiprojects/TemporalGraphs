@@ -102,7 +102,6 @@ tree_nodes = {source: tree_node_root}
 
 while queue:
     queue_item = queue.pop(0)
-    print("L'elemento estratto è: " + str(queue_item))
     current_node = queue_item[0]
     current_tree_node = tree_nodes[current_node]
     for v in graph.get_neighbors(current_node):
@@ -110,7 +109,6 @@ while queue:
         # il predecessore nella BFS non deve essere considerato come vicino
         if v is predecessor[current_node]:
             continue
-        print("\tHo scelto il nodo vicino: " + v)
         # filtra gli archi che non sono stati attraversati e che sono ancora attivi
         filter_function = lambda edge: not edge.is_traversed and sigma[current_node] <= edge.time
         E = list(filter(filter_function, graph.get_edge_neighbor(current_node, v)))
@@ -123,7 +121,6 @@ while queue:
                     new_tree_node = TreeNode(v, edge_min.time)
                     tree_nodes[v] = new_tree_node
                     current_tree_node.add_node(new_tree_node)
-                    print("\tAggiungo a " + current_tree_node.name + " il figlio " + v)
                     dist[v] = dist[current_node] + 1
                     sigma[v] = edge_min.time
                     predecessor[v] = current_node
@@ -135,7 +132,6 @@ while queue:
                         new_tree_node = TreeNode(v, edge_min.time)
                         tree_nodes[v] = new_tree_node
                         current_tree_node.add_node(new_tree_node)
-                        print("\tAggiungo a " + current_tree_node.name + " il figlio " + v)
                         sigma[v] = edge_min.time
                         predecessor[v] = current_node
                         updateNodeIntoQueue(queue, occurrence, sigma[v], current_node)
@@ -145,26 +141,13 @@ while queue:
                         new_tree_node = TreeNode(v, edge_min.time)
                         tree_nodes[v] = new_tree_node
                         current_tree_node.add_node(new_tree_node)
-                        print("\tAggiungo a " + current_tree_node.name + " il figlio " + v)
                         dist[v] = dist[current_node] + 1
                         sigma[v] = edge_min.time
                         predecessor[v] = current_node
                         queue.append((v, dist[v], sigma[v], predecessor[v]))
 
 
-for edge in graph.get_edges():
-    print(edge)
-
-print(tree_node_root)
-print(tree_node_root.list_of_nodes[0])
-print(tree_node_root.list_of_nodes[1])
-print(tree_node_root.list_of_nodes[2])
 draw_tree(tree_node_root)
-
-
-new_tree_node = TreeNode(v, edge_min.time)
-tree_nodes[v] = new_tree_node
-current_tree_node.add_node(new_tree_node)
 
 
 
