@@ -49,6 +49,7 @@ Algoritmo DFS-v1:
 '''
 
 
+# ----------------------- function definitions ---------------------------------
 def find_edge_with_min_time(E):
     edge_min = E[0]
     for i in range(1, len(E)):
@@ -57,7 +58,7 @@ def find_edge_with_min_time(E):
     return edge_min
 
 
-def dfsv1(current_node):
+def dfs_v1(current_node):
     global current_tree_node
     for v in graph.get_neighbors(current_node):
 
@@ -80,11 +81,11 @@ def dfsv1(current_node):
                 current_tree_node = next_tree_node
 
                 sigma[edge_min.destination] = edge_min.time
-                dfsv1(edge_min.destination)
+                dfs_v1(edge_min.destination)
     current_tree_node = predecessor[current_tree_node.name]
 
 
-# --------------------------------------------------------
+# ------------------------- IMPORT and GRAPH DEFINITION -------------------------------
 from temporal_graph import TemporalGraph
 from math import inf
 from TreeNode import TreeNode
@@ -108,17 +109,19 @@ edges = [["a", "b", 1],
 for e in edges:
     graph.add_edge(e[0], e[1], e[2])
 
+# ------------- starting time, sigma, dist ecc ------------
 # V:= insieme di tutti i nodi del grafo
 # sigma:= dizionario { <nome_nodo> : <ultimo istante in cui è stato visitato> }
 starting_time = 2
 V = graph.get_nodes()
 sigma = {key: inf for key in V}
+# ------------- updating source ------------
 source = V[0]
 sigma[source] = starting_time
+# ------------- setting first tree node ------------
 tree_node_root = TreeNode(source, starting_time)
 predecessor = {node: None for node in V}
 current_tree_node = tree_node_root
-
-dfsv1(source)
-
+# ------------------- DFS-v1 ------------------
+dfs_v1(source)
 draw_tree(tree_node_root)
