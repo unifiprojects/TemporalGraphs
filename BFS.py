@@ -1,5 +1,9 @@
 '''
-
+Il seguente codice necessita della libreria graphviz: https://pypi.org/project/graphviz/
+usare uno dei seguenti comandi (a scelta) per installare su ambiente Linux
+apt-get install graphviz
+pip install graphviz
+-------------------------------------------------------------------------------------------
 Pseudocodice della BFS temporale
 
 Grafo temporale:                G(V,E)
