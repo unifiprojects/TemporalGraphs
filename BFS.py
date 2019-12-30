@@ -1,43 +1,43 @@
 '''
 
-BFS on temporal graphs
+Pseudocodice della BFS temporale
 
 Grafo temporale:                G(V,E)
 Source vertex:                  s
 Tempo di inizio:                Ts
-Vettore dei tempi di visita:    delta(v)
+Vettore dei tempi di visita:    sigma(v)
 Numero di hop da 's' a 'v':     dist(v)
 Predecessore di 'v' nella BFS:  p(v)
 Coda:                           Q
 
 Algoritmo BFS:
 
-1)  Inizializzo i vettori 'delta(v) = inf', 'dist(v) = inf', 'p(v) = 0', per ogni vertice 'v' in V
+1)  Inizializzo i vettori 'sigma(v) = inf', 'dist(v) = inf', 'p(v) = NULL', per ogni vertice 'v' in V
     Inizializzo la coda Q vuota
 
-2)  Visito il primo vertice 's', imposto 'dist(s) = 0', 'p(s) = 0'
-    Push nella coda Q di (s, dist(s), delta(s), p(s))
+2)  Seleziono il vertice sorgente 's', imposto 'dist(s) = 0', 'p(s) = NULL', sigma(s) = Ts
+    Inserisco nella coda Q la tupla (s, dist(s), sigma(s), p(s))
 
-3)  While Q is not empty:
-        a)  Pop '(u, dist(u), delta(u), p(u))'
+3)  Finche' Q non e' vuota:
+        a)  Pop '(u, dist(u), sigma(u), p(u))'
 
-        b)  Definisco 'E(u,v)' l'insieme di archi da 'u' a 'v', non ancora attraversati e con 'delta(u) <= t'
+        b)  Definisco 'E(u,v)' l'insieme di archi da 'u' a 'v' t.c. non sono stati attraversati e con 'sigma(u) <= t'
 
             i)  Selezione dell'arco 'e = (u, v, t)' appartenente ad 'E(u,v)' con tempo 't' minore
 
-            ii) Se 'v' non é in Q:
-                    ossia non é gia stato visitato, attraverso 'e' e se 'delta(v) > t'
-                    visito 'v' e push di (v, dist(v) = dist(v) + 1, delta(v) = t, p(v) = u) in Q
+            ii) Se 'v' non e' in Q:
+                    ossia non e' gia stato visitato, attraverso 'e' e se 'sigma(v) > t'
+                    visito 'v' e push di (v, dist(v) = dist(v) + 1, sigma(v) = t, p(v) = u) in Q
 
-            iii)Se 'v' é in Q:
-                    Controllo '(v, dist(v), delta(v), p(v))'
+            iii)Se 'v' e' in Q:
+                    Controllo '(v, dist(v), sigma(v), p(v))'
 
-                    Se 'dist(v) = dist(u) + 1': ('v' é gia stato visitato da un nodo allo stesso livello)
-                        attraverso 'e' e se delta(v) > t, visito 'v', imposto 'delta(v) = t' e 'p(v) = u'
+                    Se 'dist(v) = dist(u) + 1': ('v' e' gia stato visitato da un nodo allo stesso livello)
+                        attraverso 'e' e se sigma(v) > t, visito 'v', imposto 'sigma(v) = t' e 'p(v) = u'
 
-                    Se 'dist(v) = dist(u)': ('v' é gia stato visitato da un nodo al livello superiore)
-                        attraverso 'e' e se 'delta(v) > t', visito 'v',
-                        push '(v, dist(v) = dist(u) + 1, delta(v) = t, p(v) = u)' in Q
+                    Se 'dist(v) = dist(u)': ('v' e' gia stato visitato da un nodo al livello superiore)
+                        attraverso 'e' e se 'sigma(v) > t', visito 'v',
+                        push '(v, dist(v) = dist(u) + 1, sigma(v) = t, p(v) = u)' in Q
 
 
 '''
@@ -69,6 +69,7 @@ def update_node_into_queue(queue, occurrence, time, pred):
         count += 1
 
 
+# ----------------------- BFS TEMPORALE ---------------------------------
 def bfs():
     global current_node, current_tree_node
     while queue:
@@ -126,6 +127,7 @@ from draw_tree import draw_tree
 
 graph = TemporalGraph()
 
+# grafo tratto dal paper
 edges = [["a", "b", 2],
          ["b", "a", 5],
          ["a", "c", 4],
