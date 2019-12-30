@@ -24,7 +24,7 @@ def change_duplicate_names(copy_tree_node):
                 nodes.append(child.name)
 
 
-def draw_tree(tree_node_root):
+def draw_tree(tree_node_root, name_pdf):
     copy_tree_node = copy.deepcopy(tree_node_root)
     change_duplicate_names(copy_tree_node)
 
@@ -38,4 +38,4 @@ def draw_tree(tree_node_root):
             g.node(child.name)
             g.edge(node.name, child.name, str(child.last_time_of_visit), minlen='2', dir="forward")
 
-    g.view()
+    g.view(name_pdf)

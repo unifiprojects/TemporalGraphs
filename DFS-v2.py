@@ -122,4 +122,4 @@ predecessor = {node: None for node in V}
 current_tree_node = tree_node_root
 # ------------------- DFS-v2 ------------------
 dfs_v2(source)
-draw_tree(tree_node_root)
+draw_tree(tree_node_root, 'DFS_v2')

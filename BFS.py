@@ -156,4 +156,4 @@ current_tree_node = tree_node_root
 tree_nodes = {source: tree_node_root}
 # ------------------- BFS ------------------
 bfs()
-draw_tree(tree_node_root)
+draw_tree(tree_node_root, 'BFS')
